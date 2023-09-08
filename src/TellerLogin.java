@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 
 public class TellerLogin {
-    public static void login() {
+    public static boolean login() {
         Scanner teller = new Scanner(System.in);
         System.out.println("Welcome, please enter your username: ");
         int maxAttempts = 3;
@@ -18,6 +18,7 @@ public class TellerLogin {
             //checks if username is empty and prompts user to try again
             if (username.isEmpty()) {
                 System.out.println("Username cannot be empty, try again");
+                attempts++;
 
             } else {
                 //prompt user to enter password
@@ -28,26 +29,30 @@ public class TellerLogin {
                 for (int i = 0; i < arrName.length; i++) {
                     if (username.equalsIgnoreCase(arrName[i]) && password.equals(arrPasswords[i])) {
                         loginSuccessful = true;
+
                         break;
                     }
                 }
                 //messages printed depending on whether login is successful or not
                 if (loginSuccessful) {
                     System.out.println("Access granted! Welcome " + username);
-                    break;
+                    return true;
                 } else {
                     System.out.println("Access denied!");
                     attempts++;
+                    //break;
+
                 }
             }
             //shows how many attempts left
-            System.out.println("You have " + (maxAttempts - attempts) + " attempt(s) left");
+            System.out.println("You have " + (maxAttempts - attempts) + " attempt(s) left.");
+            if (attempts<3){
+                System.out.println("Please enter your username:");
+            }
             //loop closed after number of attempts exceed max
         } while (attempts < maxAttempts);
 
         teller.close();
+        return false;
     }
 }
-
-
-

@@ -1,41 +1,57 @@
 import java.util.Scanner;
+
 public class Menu {
-    private  static TellerLogin tellerLogin = new TellerLogin();
+
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
 
-        do {
-            System.out.println("Main Menu");
-            System.out.println("1. Create Account");
-            System.out.println("2. Access Account");
-            System.out.println("3. Help");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice (1-4): ");
+        Scanner v = new Scanner(System.in);
+        boolean login =TellerLogin.login();
 
-            choice = scanner.nextInt();
-
-            switch (choice) {
+        //make sure they enter 1-4
+        if (login){
+            System.out.println("Main Menu\n1.Create Account\n2.Access Account\n3.Help\n4.Exit") ;
+            System.out.println("Enter your choice (1-4):");
+            int choice= v.nextInt();
+            switch (choice){
                 case 1:
-                    System.out.println("Creating a new account...");
-                    // Add your code for creating an account here
-                    break;
-                case 2:
-                    System.out.println("Accessing your account...");
-                    tellerLogin.login(); // Call the login method from TellerLogin
-                    break;
-                case 3:
-                    System.out.println("Help: Here is some help information.");
-                    // Add your code for displaying help information here
-                    break;
-                case 4:
-                    System.out.println("Exiting the program. Goodbye!");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please enter a valid option (1-4).");
-            }
-        } while (choice != 4);
+                    System.out.println("1.Personal Account\n2.ISA Account\n3.Business Account");
+                    int createchoice = v.nextInt();
+                    switch (createchoice){
+                        //STORE USERNAME, ACCOUNT NUMBER, SORTCODE
+                        //RAZAT -> PERSONAL
+                        //HAMZA -> ISA
+                        //SHOPITHA -> BUSINESS
+                        case 1:
+                            //personal account
+                            break;
+                        case 2:
+                            //isa account
+                            break;
+                        case 3:
+                            //business account
+                            break;
+                    }
 
-        scanner.close();
+                    break;
+
+                case 2:
+                    //ENTER ACCOUNT, SORT CODE -> SAVED IN FILE -> FILE NAME: USERNAME
+                    //SHOW BALANCE ->  TRANSFER, WITHDRAW, DEPOSIT
+
+
+                case 3:
+                    System.out.println();
+                    break;
+
+                case 4:
+                    System.out.println("Goodbye");
+                    break;
+            }
+        }
+        else {
+            System.out.println("Access denied");
+        }
+
     }
 }
