@@ -52,7 +52,6 @@ public class TellerLogin {
             }
             //loop closed after number of attempts exceed max
         } while (attempts < maxAttempts);
-
         teller.close();
         return false;
     }
