@@ -10,6 +10,7 @@ public class TellerLogin {
         //two arrays with five names and passwords
         String[] arrName = {"admin", "user2", "user3", "user4", "user5"};
         String[] arrPasswords = {"password", "pass2", "pass3", "pass4", "pass5"};
+
         //do-while loop started
         do {
             //prompt user to enter username
