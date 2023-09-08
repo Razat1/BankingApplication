@@ -35,7 +35,7 @@ public class Menu {
 
                     break;
 
-                case 2:
+                case 2: //hello
                     //ENTER ACCOUNT, SORT CODE -> SAVED IN FILE -> FILE NAME: USERNAME
                     //SHOW BALANCE ->  TRANSFER, WITHDRAW, DEPOSIT
 
