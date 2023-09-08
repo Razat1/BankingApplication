@@ -18,7 +18,6 @@ public class TellerLogin {
             //checks if username is empty and prompts user to try again
             if (username.isEmpty()) {
                 System.out.println("Username cannot be empty, try again");
-                attempts++;
 
             } else {
                 //prompt user to enter password
@@ -49,7 +48,6 @@ public class TellerLogin {
         teller.close();
     }
 }
-
 
 
 
