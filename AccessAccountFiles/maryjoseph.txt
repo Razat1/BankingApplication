@@ -1,0 +1,7 @@
+Username: maryjoseph
+Name: mary
+Date of Birth: 1999-09-11
+Account Balance: £600
+Account Number: A161349995
+Sort Code: 86-36-13
+PIN: 8533

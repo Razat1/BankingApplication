@@ -1,0 +1,9 @@
+Username: joeB
+Name: joe
+Date of Birth: 1985-09-11
+Photo ID: Verified
+Address Proof: Verified
+Minimum Deposit: Confirmed
+Account Number: A591732471
+Sort Code: 96-10-17
+PIN: 5748

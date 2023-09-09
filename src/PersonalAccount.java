@@ -9,17 +9,20 @@ import java.util.Scanner;
 public class PersonalAccount {
     public static void CreateAccount() {
         Scanner userDetails = new Scanner(System.in);
+        //asking user details
         System.out.println("Please provide customer's name: ");
         String name = userDetails.nextLine();
 
-
+        //ensuring form of date is valid.
         LocalDate dateOfBirth = null;
         boolean validDateFormat = false;
+        //random generated numbers for each.
 
         String accountNumber = generateRandomAccountNumber();
         String sortCode = generateRandomSortCode();
         String pin = generateRandomPIN();
 
+//while loop for date format validation
         while (!validDateFormat) {
             System.out.println("Please provide customer's date of birth in format YYYY-MM-DD: ");
             DateTimeFormatter dateformat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -33,6 +36,8 @@ public class PersonalAccount {
                 System.out.println("Invalid date format. Please use yyyy-MM-dd format.");
             }
         }
+
+        //rest of the details asked from user
         System.out.println("Please confirm photo ID proof of customer (Yes/No) : ");
         boolean photoID = userDetails.nextLine().equalsIgnoreCase("Yes");
         System.out.println("Please confirm proof of address of customer (Yes/No) : ");
@@ -42,8 +47,8 @@ public class PersonalAccount {
         System.out.println("Create a username for customer: ");
         String username = userDetails.nextLine();
 
-
-        String customerInfo = "Username: " + username + "\n" +
+//details of user saved in customer information page
+        String customerInfoCreate = "Username: " + username + "\n" +
                 "Name: " + name + "\n" +
                 "Date of Birth: " + dateOfBirth + "\n" +
                 "Photo ID: " + (photoID ? "Verified" : "Not Provided") + "\n" +
@@ -53,20 +58,39 @@ public class PersonalAccount {
                 "Sort Code: " + sortCode + "\n" +
                 "PIN: " + pin;
 
+//select details of user saved in access file which is viewed and accessed later.
+        String customerInfoAccess = "Username: " + username + "\n" +
+                "Name: " + name + "\n" +
+                "Account Number: " + accountNumber + "\n" +
+                "Sort Code: " + sortCode + "\n";
+        // "PIN: " + pin;
+
         // Write customer information to a file named after their username
         String path = "C:\\Users\\user\\Desktop\\NovusGroupProject\\BankingApplication\\CreateAccountFiles\\";
         String fileName = path + username + ".txt";
         try {
             FileWriter fileWriter = new FileWriter(fileName);
             PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println(customerInfo);
+            printWriter.println(customerInfoCreate);
             printWriter.close();
             System.out.println("Customer information saved to '" + fileName + "'.");
         } catch (IOException e) {
             System.out.println("Error occurred while saving customer information.");
         }
+        //Customer information for access file named after username with same sort code and account number
+        String path2 = "C:\\Users\\user\\Desktop\\NovusGroupProject\\BankingApplication\\AccessAccountFiles\\";
+        String fileName2 = path2 + username + ".txt";
+        try {
+            FileWriter fileWriter = new FileWriter(fileName2);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.println(customerInfoAccess);
+            printWriter.close();
+            System.out.println("Customer information saved to '" + fileName2 + "'.");
+        } catch (IOException e) {
+            System.out.println("Error occurred while saving customer information.");
+        }
     }
-
+//code for randomly generated account, sort code and pin numbers
     private static String generateRandomAccountNumber() {
         Random random = new Random();
         StringBuilder accountNumber = new StringBuilder("A");

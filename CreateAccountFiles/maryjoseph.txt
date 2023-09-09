@@ -1,8 +1,0 @@
-Username: maryjoseph
-Name: mary
-Date of Birth: 1999-09-11
-Photo ID: Verified
-Address Proof: Verified
-Minimum Deposit: ConfirmedAccount Number: A161349995
-Sort Code: 86-36-13
-PIN: 8533
