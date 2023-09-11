@@ -1,77 +1,68 @@
+import java.io.*;
 import java.util.Scanner;
 
 public class Menu {
 
-
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        Scanner v = new Scanner(System.in);
-        boolean login =TellerLogin.login();
+        boolean tellerLoggedIn = TellerLogin.login();
 
-        //make sure they enter 1-4
-        if (login){
-            System.out.println("Main Menu\n1.Create Account\n2.Access Account\n3.Help\n4.Exit") ;
-            System.out.println("Enter your choice (1-4):");
-            int choice= v.nextInt();
-            switch (choice){
-                case 1:
-                    System.out.println("1.Personal Account\n2.ISA Account\n3.Business Account");
-                    int createchoice = v.nextInt();
-                    switch (createchoice){
-                        //STORE USERNAME, ACCOUNT NUMBER, SORTCODE
-                        //RAZAT -> PERSONAL
-                        //HAMZA -> ISA
-                        //SHOPITHA -> BUSINESS
-                        case 1:
-                            //personal account
-                            break;
-                        case 2:
-                            //isa account
-                            break;
-                        case 3:
-                            //business account
-                            break;
-                    }
+        if (tellerLoggedIn) {
+            boolean existingUser = UserAuthentication.isExistingUser(scanner);
 
-                    break;
+            while (true) {
+                if (!existingUser) {
+                    System.out.println("You are a new user. Please create an account.");
+                    AccountCreation.createAccount(scanner);
+                }
 
-                case 2:
-                    //ENTER ACCOUNT, SORT CODE -> SAVED IN FILE -> FILE NAME: USERNAME
-                    //SHOW BALANCE ->  TRANSFER, WITHDRAW, DEPOSIT
+                System.out.println("Main Menu\n1. Create Account\n2. Access Account\n3. Help\n4. Logout");
+                System.out.println("Enter your choice (1-4):");
 
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
 
-                case 3:
-                    System.out.println("1.What documents are accepted as photo ID proof?");
-                    System.out.println("Passports and Driver’s Licence");
-                    System.out.println("2.What documents are accepted as address-based ID proof?");
-                    System.out.println("Utility Bills and Council Letter");
-                    System.out.println("3.What is the minimum age requirement for Personal and Business Accounts?");
-                    System.out.println("16 Years and older");
-                    System.out.println("4.What is the minimum age requirement for ISA Accounts?");
-                    System.out.println("16 and over for Cash ISA and 18 for the rest. Under 18s are offered Junior ISA");
-                    System.out.println("5.What is the charge of a Business Account?");
-                    System.out.println("£120 annually");
-                    System.out.println("6.What type of companies can open a Business Account?");
-                    System.out.println("Sole Traders, Limited Companies and Partnerships");
-                    System.out.println("7.Is a minimum deposit required for a Personal Account?");
-                    System.out.println("Yes, a minimum of £1 is required.");
-                    System.out.println("8.What is the maximum you can save in a ISA Account?");
-                    System.out.println("£20,000");
-                    System.out.println("9.What are the loan facilities?");
-                    System.out.println("For Business Accounts, you are offered an overdraft and access to loans.");
-                    System.out.println("10.What is the APR of the ISA Account?");
-                    System.out.println("2.75% on average annual balance");
-                    break;
+                switch (choice) {
+                    case 1:
+                        // createAccount(scanner);
+                        AccountCreation.createAccount(scanner);
+                        break;
+                    case 2:
+                        // Implement account access logic here
+                        System.out.println("Account access logic goes here.");
+                        break;
+                    case 3:
+                        // Display the help file here
+                        // You can implement the logic to read and display the file as you did before
+                        displayHelpFile();
+                        break;
+                    case 4:
+                        System.out.println("Logging out...");
+                        existingUser = false; // Log out by setting existingUser to false
+                        existingUser = UserAuthentication.isExistingUser(scanner);
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
 
-                case 4:
-                    System.out.println("Goodbye");
-                    break;
+                }
             }
         }
 
-        else {
-            System.out.println("Access denied");
-        }
+        scanner.close();
+    }
 
+    // Method to display help file
+    private static void displayHelpFile() {
+        try (InputStream inputStream = Menu.class.getResourceAsStream("/FAQ.txt")) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String contentLine = reader.readLine();
+            while (contentLine != null) {
+                System.out.println(contentLine);
+                contentLine = reader.readLine();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

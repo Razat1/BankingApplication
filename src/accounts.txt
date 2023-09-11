@@ -1,0 +1,2 @@
+Firstname,Lastname,DateOfBirth,Business Name,Account Type,AccountNumber,SortCode,Pin,Deposit
+hamza,damiel,2001-01-10,N/A,Personal,85057750,05-04-20,1464,0
