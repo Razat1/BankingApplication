@@ -1,6 +1,9 @@
 import java.io.*;
+import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.Set;
+
 class UserAuthentication {
     private static String enteredUsername;
 
@@ -120,13 +123,22 @@ class UserAuthentication {
         int passwordLength = password.length();
         int maxTries = 4; // Initial try + 3 retries
 
+        Set<Integer> usedPositions = new HashSet<>();
+
         for (int tryCount = 1; tryCount <= maxTries; tryCount++) {
             // Generate random positions for characters from the password
             Random random = new Random();
             int[] randomPositions = new int[3]; // Assuming you want 3 random positions
 
             for (int i = 0; i < 3; i++) {
-                randomPositions[i] = random.nextInt(passwordLength) + 1; // Adjust positions to start from 1
+                int position;
+                do {
+                    position = random.nextInt(passwordLength) + 1; // Adjust positions to start from 1
+                } while (usedPositions.contains(position)); // Keep generating until an unused position is found
+
+                usedPositions.add(position); // Mark the position as used
+
+                randomPositions[i] = position;
             }
 
             System.out.println("Attempt " + tryCount + ":");

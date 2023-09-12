@@ -1,2 +1,6 @@
-Firstname,Lastname,DateOfBirth,Business Name,Account Type,AccountNumber,SortCode,Pin,Deposit
-hamza,damiel,2001-01-10,N/A,Personal,85057750,05-04-20,1464,0
+Username,Firstname,Lastname,DateOfBirth,BusinessName,AccountType,AccountNumber,SortCode,Pin,Balance
+haha,haha,haha,2001-10-10,N/A,Personal,16380400,05-04-20,7955,5
+user1,hamza,damiel,2001-01-10,N/A,Personal,46423105,05-04-20,9035,2
+no,hamza,damiel,2001-01-10,N/A,Personal,76905001,05-04-20,0740,1
+no,hamza,damiel,2001-01-10,N/A,Personal,79851961,05-04-20,7431,0
+no,hamza,damiel,2001-01-10,N/A,Stocks & Shares ISA,58707679,05-09-19,7762,20000

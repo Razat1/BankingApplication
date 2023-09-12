@@ -1,0 +1,5 @@
+Username,Firstname,Lastname,DateOfBirth,BusinessName,AccountType,AccountNumber,SortCode,Pin,Balance
+haha,haha,haha,2001-10-10,N/A,Personal,16380400,05-04-20,7955,1
+user1,hamza,damiel,2001-01-10,N/A,Personal,46423105,05-04-20,9035,1
+no,hamza,damiel,2001-01-10,N/A,Personal,76905001,05-04-20,0740,1
+no,hamza,damiel,2001-01-10,N/A,Personal,79851961,05-04-20,7431,3
