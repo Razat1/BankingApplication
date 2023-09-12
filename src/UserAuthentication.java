@@ -3,26 +3,25 @@ import java.util.Scanner;
 import java.util.Random;
 class UserAuthentication {
     private static String enteredUsername;
-    //make username
+
     public static String getEnteredUsername() {
         return enteredUsername;
     }
+
     public static boolean isExistingUser(Scanner scanner) {
         System.out.print("Is the customer an existing user? (yes/no): ");
         String answer = scanner.nextLine().toLowerCase();
 
 
-        if (answer.equals("yes")) {
-            // Check if the user exists in the user data file
+        String generatedPassword = null;
+        if (answer.equals("yes") || enteredUsername != null) {
             System.out.println("Enter your username: ");
             enteredUsername = scanner.nextLine();
-
-            // You can implement user existence check here
             boolean userExists = checkUserExists(enteredUsername);
 
             if (userExists) {
-                // User exists, perform additional authentication
                 String password = getPasswordForUser(enteredUsername);
+
                 if (authenticateUser(scanner, password)) {
                     System.out.println("Authentication success");
                     return true;
@@ -32,29 +31,39 @@ class UserAuthentication {
             } else {
                 System.out.println("User does not exist.");
             }
-        }  do {
+        }
+
+        do {
             System.out.print("Enter a username: ");
             enteredUsername = scanner.nextLine();
             boolean userExists = checkUserExists(enteredUsername);
             if (userExists) {
                 System.out.println("User already exists. Try again.");
             } else {
-                String generatedPassword = generateRandomPassword();
+                generatedPassword = generateRandomPassword();
                 storeUserDetails(enteredUsername, generatedPassword);
                 System.out.println("User registered successfully.");
                 System.out.println("Generated Password: " + generatedPassword);
+                updateUserDetails(enteredUsername, generatedPassword);
+
+                // Call the readFile method to display the updated file
+                try {
+                    File file = new File("src/user_details.txt");
+                    long fileLength = file.length();
+                    readFile(file, fileLength);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 return false; // New user, no need for further checks
             }
         } while (true);
-
-
     }
+
 
     // Check if the user exists based on the username
     private static boolean checkUserExists(String enteredUsername) {
-
-        try (InputStream inputStream = Menu.class.getResourceAsStream("/user_details.txt")) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/user_details.txt"))) {
             String contentLine;
             while ((contentLine = reader.readLine()) != null) {
                 String[] parts = contentLine.split(",");
@@ -73,15 +82,24 @@ class UserAuthentication {
 
     // Get the user's password based on the username
     private static String getPasswordForUser(String enteredUsername) {
-        try (InputStream inputStream = Menu.class.getResourceAsStream("/user_details.txt")) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String filePath = "src/user_details.txt"; // Replace with the correct path to your user data file
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String contentLine;
             while ((contentLine = reader.readLine()) != null) {
                 String[] parts = contentLine.split(",");
-                if (parts.length >= 2) { // Ensure at least username and password exist
+                if (parts.length >= 2) {
                     String usernameFromFile = parts[0];
                     String passwordFromFile = parts[1];
                     if (usernameFromFile.equals(enteredUsername)) {
+                        // Call the readFile method to display the file contents
+                        try {
+                            File file = new File(filePath);
+                            long fileLength = file.length();
+                            readFile(file, fileLength);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         return passwordFromFile;
                     }
                 }
@@ -89,6 +107,7 @@ class UserAuthentication {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return null; // User not found or password not available
     }
 
@@ -162,13 +181,68 @@ class UserAuthentication {
         return password.toString();
     }
     private static void storeUserDetails(String username, String password) {
-       // Store the username and password in the user_details.txt file
-      try (FileWriter fileWriter = new FileWriter("src/user_details.txt", true);
-           BufferedWriter writer = new BufferedWriter(fileWriter)) {
-           writer.write(username + "," + password);
-           writer.newLine();
-      } catch (IOException e) {
-           e.printStackTrace();
-      }
+        // Store the username and password in the user_details.txt file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/user_details.txt", true))) {
+            // Append the new user details to the file
+            writer.write(username + "," + password);
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void updateUserDetails(String username, String newPassword) {
+        try {
+            File file = new File("src/user_details.txt");
+            File tempFile = new File("src/temp.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String line;
+            boolean found = false; // To track if the user was found for updating
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2 && parts[0].equals(username)) {
+                    // Update the line with the new password
+                    line = username + "," + newPassword;
+                    found = true;
+                }
+                writer.write(line + System.lineSeparator());
+            }
+
+            reader.close();
+            writer.close();
+
+            // Debugging statements
+            System.out.println("Found: " + found);
+
+            // Delete the original file and rename the temporary file
+            if (found) {
+                if (file.delete()) {
+                    tempFile.renameTo(file);
+                    System.out.println("User details updated successfully.");
+                } else {
+                    System.out.println("Failed to update user details.");
+                }
+            } else {
+                System.out.println("User not found.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void readFile(File file, long fileLength) throws IOException {
+        String line = null;
+
+        try (BufferedReader in = new BufferedReader(new java.io.FileReader(file))) {
+            in.skip(fileLength);
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
     }
 }

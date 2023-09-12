@@ -26,8 +26,6 @@ public class AccountCreation {
         LocalDate dateOfBirth = null;
         boolean validDateFormat = false;
         //random generated numbers for each.
-        String accountNumber = generateRandomAccountNumber();
-        String pin = generateRandomPIN();
         int value = 1;
 
         int years = 0;
@@ -75,6 +73,7 @@ public class AccountCreation {
         String sortCode = null;
         String accountType ="N/A";
         String output = null;
+        String accountNumber = null;
         int accChoice = 0;
         //IF THEY CANT PROVIDE ADDRESS AND ID AND BUSINESS IT STOPS
 
@@ -87,7 +86,7 @@ public class AccountCreation {
                     deposit ++;
                 }
                 accountType = "Personal";
-                System.out.println(username + " " + accountNumber + " " + sortCode);
+                //System.out.println(username + " " + accountNumber + " " + sortCode);
 
 
                 break;
@@ -114,22 +113,22 @@ public class AccountCreation {
 
                 switch (accChoice) {
                     case 1:
-                        accountType = "Stocks & Shares";
+                        accountType = "Stocks & Shares ISA";
                         break;
                     case 2:
-                        accountType = "Innovative";
+                        accountType = "Innovative ISA";
                         break;
                     case 3:
-                        accountType = "Cash";
+                        accountType = "Cash ISA";
                         break;
                     case 4:
                         if (years < 40) {
-                            accountType = "Lifetime";
+                            accountType = "Lifetime ISA";
                             break;
                         }
                     case 5:
                         if (years < 18) {
-                            accountType = "Junior";
+                            accountType = "Junior ISA";
                             break;
                         }
                     default:
@@ -144,7 +143,7 @@ public class AccountCreation {
 
                 sortCode = "05-09-19";
 
-                System.out.println(username + " " + accountNumber + " " + sortCode);
+                //System.out.println(username + " " + accountNumber + " " + sortCode);
                 break;
             case 3:
                 //every year 120 taken off
@@ -169,7 +168,7 @@ public class AccountCreation {
                     value = 0;
                 }
 
-                System.out.println(username + " " + accountNumber + " " + sortCode);
+                //
                 break;
 
 
@@ -178,24 +177,27 @@ public class AccountCreation {
         //String filePath = "src/"+username+".txt";
         String accountsfile  ="src/accounts.txt";
 
-        String contentToAppend = "Firstname" + "," + "Lastname" + "," + "DateOfBirth" + "," + "Business Name" + "Account Type" + "," + "AccountNumber" + "," + "SortCode" + "," + "Pin" + "," + "Deposit";
+        String contentToAppend = "Username,Firstname,Lastname,DateOfBirth,BusinessName,AccountType,AccountNumber,SortCode,Pin,Balance";
         if (value !=0) {
+
+            accountNumber = generateRandomAccountNumber();
+            String pin = generateRandomPIN();
             try {
                 // Step 1: Check if the file exists
                 File file = new File(accountsfile);
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                if (!file.exists()) {
+                if (!file.exists() || file.length() == 0) {
                     // Step 2: Create the file if it doesn't exist
                     file.createNewFile();
                     System.out.println("File created: " + accountsfile);
                     writer.write(contentToAppend);
-                    writer.write(firstname + "," + lastname + "," + dateOfBirth + "," + businessname + "," + accountType + "," + accountNumber + "," + sortCode + "," + pin + "," + deposit + "\n");
+                    writer.write("\n"+username+","+firstname + "," + lastname + "," + dateOfBirth + "," + businessname + "," + accountType + "," + accountNumber + "," + sortCode + "," + pin + "," + deposit + "\n");
 
                     writer.close();
 
                 } else {
 
-                    writer.write(firstname + "," + lastname + "," + dateOfBirth + "," + businessname + "," + accountType + "," + accountNumber + "," + sortCode + "," + pin + "," + deposit + "\n");
+                    writer.write(username+","+firstname + "," + lastname + "," + dateOfBirth + "," + businessname + "," + accountType + "," + accountNumber + "," + sortCode + "," + pin + "," + deposit + "\n");
 
                     writer.close();
                 }
@@ -213,7 +215,7 @@ public class AccountCreation {
             System.out.println("The customer cannot create an account due to the answers");
         }
 
-
+        System.out.println(username + " " + accountNumber + " " + sortCode);
     }
     //code for randomly generated account, sort code and pin numbers
     private static String generateRandomAccountNumber() {
