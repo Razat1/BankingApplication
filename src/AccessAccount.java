@@ -23,13 +23,13 @@ public class AccessAccount {
         String sortCode = scanner.nextLine();
 
         System.out.println(accountNumber + " " + sortCode);
-        System.out.println("Please specify what you would like to do.\n1.View Balance\n2.Withdraw\n3.Transfer\n4.Deposit\n5.View Accounts");
+        System.out.println("Please specify what you would like to do.\n1.View Balance\n2.Withdraw\n3.Transfer\n4.Deposit");
         int accessChoice = scanner.nextInt();
         loadUserDetailsFromFile("src/accounts.txt");
         switch (accessChoice) {
             case 1:
                 if (checkAccountAccess(username, accountNumber, sortCode)) {
-                    String balance = getBalance(username, accountNumber);
+                    String balance = getBalance(username, accountNumber, sortCode);
                     System.out.println(balance);
                 } else {
                     System.out.println("Access Denied");
@@ -39,7 +39,7 @@ public class AccessAccount {
                 if (checkAccountAccess(username, accountNumber, sortCode)) {
                     // Implement withdraw logic here
                     Integer numBalance = null;
-                    String balance = getBalance(username, accountNumber);
+                    String balance = getBalance(username, accountNumber, sortCode);
                     try {
                         numBalance = Integer.valueOf(balance);
                     } catch (NumberFormatException e) {
@@ -48,7 +48,7 @@ public class AccessAccount {
 
                     System.out.println("Please enter amount to withdraw");
                     int amount = scanner.nextInt();
-                    System.out.println(balance);
+
                     if (numBalance > amount) {
                         numBalance = numBalance - amount;
                         // Update the balance in the file
@@ -58,7 +58,7 @@ public class AccessAccount {
                         loadUserDetailsFromFile("src/accounts.txt");
 
                         // Display the updated balance
-                        String updatedBalance = getBalance(username, accountNumber);
+                        String updatedBalance = getBalance(username, accountNumber,sortCode);
                         // balance = getBalance(username, accountNumber);
                         System.out.println("Updated Balance: " + updatedBalance);
                     } else {
@@ -68,9 +68,6 @@ public class AccessAccount {
                 break;
 
             case 3: // Transfer
-                System.out.println("Please enter the username for the account you want to transfer to: ");
-                String transferUsername = scanner.nextLine();
-                scanner.nextLine();
 
                 System.out.println("Please enter the account number for the account you want to transfer to:");
                 int transferAccountNumber = scanner.nextInt();
@@ -79,22 +76,25 @@ public class AccessAccount {
                 System.out.println("Please enter the sort code for account you want to transfer to: ");
                 String transferSortCode = scanner.nextLine();
 
+                System.out.println("Please enter the username for the account you want to transfer to: ");
+                String transferUsername = scanner.nextLine();
+
                 System.out.println("Please enter the amount to transfer:");
                 int transferAmount = scanner.nextInt();
                 scanner.nextLine();
 
-                transferFunds(username, accountNumber, sortCode, transferUsername, transferAmount, transferAccountNumber, transferSortCode);
+                transferFunds(username, accountNumber, sortCode, transferUsername, transferAccountNumber, transferAmount, transferSortCode);
                 break;
 
 
-            case 4:
+            case 4: //deposit
                 if (checkAccountAccess(username, accountNumber, sortCode)) {
                     System.out.println("Please enter the amount to deposit:");
                     int depositAmount = scanner.nextInt();
 
                     if (depositAmount > 0) {
                         // Deposit the amount and update the balance in the file
-                        depositToAccount(username, accountNumber, depositAmount);
+                        depositToAccount(username, accountNumber, depositAmount, sortCode);
                     } else {
                         System.out.println("Invalid deposit amount. Amount must be greater than 0.");
                     }
@@ -111,8 +111,8 @@ public class AccessAccount {
                 }
 
                 break;
-            case 5:
-                //printUserDetails();
+            default:
+                System.out.println("Invalid Output");
                 break;
         }
     }
@@ -134,13 +134,27 @@ public class AccessAccount {
         return null; // User not found
     }
 
+
+
     //method for transfering funds between accounts
+    //transferFunds(username, accountNumber, sortCode, transferUsername, transferAccountNumber, transferAmount, transferSortCode);
     public static void transferFunds(String sourceUsername, int sourceAccountNumber, String sourceSortCode, String targetUsername, int targetAccountNumber, int transferAmount, String targetSortCode) {
-        // Check if source and target users exist in your userDetailsMap
-      UserDetails sourceUser = findUser(sourceUsername, sourceAccountNumber, sourceSortCode);
-      UserDetails targetUser = findUser(targetUsername, targetAccountNumber, targetSortCode);
+        // Check if source and target users exist in userDetailsMap
+        System.out.println(sourceUsername+ " "+sourceAccountNumber+ " "+sourceSortCode);
+        System.out.println(targetUsername+ " "+ targetAccountNumber+ " "+targetSortCode);
+        UserDetails sourceUser = findUser(sourceUsername, sourceAccountNumber, sourceSortCode);
+        UserDetails targetUser = findUser(targetUsername, targetAccountNumber, targetSortCode);
+        System.out.println(sourceUsername+ " "+sourceAccountNumber+ " "+sourceSortCode);
+        System.out.println(targetUsername+ " "+ targetAccountNumber+ " "+targetSortCode);
         if (sourceUser == null || targetUser == null) {
             System.out.println("Source or target user account not found.");
+            return;
+        }
+
+        // Check if source and target users also exist in the file
+        if (!checkAccountAccess(sourceUsername, sourceAccountNumber, sourceSortCode) ||
+                !checkAccountAccess(targetUsername, targetAccountNumber, targetSortCode)) {
+            System.out.println("Source or target user account not found in the file.");
             return;
         }
 
@@ -159,32 +173,38 @@ public class AccessAccount {
             targetUser.setBalance(String.valueOf(targetBalance));
 
             // Update balances in the file
-            updateBalanceInFile("src/accounts.txt",sourceUsername, sourceAccountNumber, String.valueOf(sourceBalance));
-            updateBalanceInFile("src/accounts.txt",targetUsername, targetAccountNumber, String.valueOf(targetBalance));
+            updateBalanceInFile("src/accounts.txt", sourceUsername, sourceAccountNumber, String.valueOf(sourceBalance));
+            updateBalanceInFile("src/accounts.txt", targetUsername, targetAccountNumber, String.valueOf(targetBalance));
 
             System.out.println("Transfer of £" + transferAmount + " successful.");
             System.out.println("Updated Source Balance: £" + sourceBalance);
-            System.out.println("Updated Target Balance: £" + targetBalance);
+            //System.out.println("Updated Target Balance: £" + targetBalance);
         } else {
             System.out.println("Insufficient balance in the source account.");
         }
     }
 
 
+
     //method for depositing funds to account
-    public static void depositToAccount(String username, int accountNumber, int depositAmount) {
-        String balance = getBalance(username, accountNumber);
-        int currentBalance = Integer.parseInt(balance);
+    public static void depositToAccount(String username, int accountNumber, int depositAmount, String sortCode) {
+        try{String balance = getBalance(username, accountNumber,sortCode);
+            int currentBalance = Integer.parseInt(balance);
 
-        // Calculate the new balance after the deposit
-        int newBalance = currentBalance + depositAmount;
+            // Calculate the new balance after the deposit
+            int newBalance = currentBalance + depositAmount;
 
-        // Update the balance in the file
-        updateBalanceInFile("src/accounts.txt" , username, accountNumber, String.valueOf(newBalance));
+            // Update the balance in the file
+            updateBalanceInFile("src/accounts.txt" , username, accountNumber, String.valueOf(newBalance));
 
-        // Display the updated balance
-        System.out.println("Deposit of £" + depositAmount + " successful.");
-        System.out.println("Updated Balance: £" + newBalance);
+            // Display the updated balance
+            System.out.println("Deposit of £" + depositAmount + " successful.");
+            System.out.println("Updated Balance: £" + newBalance);
+        }catch (NumberFormatException e){
+            System.out.println("Error");
+        }
+
+
     }
 
 
@@ -220,7 +240,7 @@ public class AccessAccount {
     }
 
 
-    private static boolean checkAccountAccess(String username, int accountNumber, String sortCode) {
+    protected static boolean checkAccountAccess(String username, int accountNumber, String sortCode) {
         List<UserDetails> userAccounts = userDetailsMap.get(username);
         if (userAccounts != null) {
             for (UserDetails userDetails : userAccounts) {
@@ -275,26 +295,34 @@ public class AccessAccount {
         public String getAccountType() {
             return accountType;
         }
-      
+
 
     }
-  
 
 
 
-    protected static String getBalance(String username, int accountNumber) {
+
+    protected static String getBalance(String username, int accountNumber, String sortCode) {
         List<UserDetails> userAccounts = userDetailsMap.get(username);
         if (userAccounts != null) {
             for (UserDetails userDetails : userAccounts) {
                 if (userDetails.getAccountNumber().equals(String.valueOf(accountNumber))) {
-                    return userDetails.getBalance();
+                    String balance = userDetails.getBalance();
+                    String _sortCode = userDetails.getSortCode();
+                    if (_sortCode.equals("05-09-19") && Integer.parseInt(balance) >= 20000) {
+                        System.out.println("You have reached your limit..");
+                        break;
+                    } else if (Integer.parseInt(balance) <= 0) {
+                        System.out.println("You are currently in red and charges will be applied");
+                        return userDetails.getBalance();
+                    } else {
+                        return userDetails.getBalance();
+                    }
                 }
             }
         }
-        return "Account not found.";
+        return "Account not found or Limit Reached";
     }
-
-
 
     private static void updateBalanceInFile(String fileName, String username, int accountNumber, String newBalance) {
         List<String> updatedLines = new ArrayList<>();
@@ -316,6 +344,9 @@ public class AccessAccount {
                         // Update the balance in the line
                         parts[9] = newBalance;
                         found = true;
+
+                        // Update the balance in memory as well
+                        updateUserBalance(username, accountNumber, newBalance);
                     }
                     updatedLines.add(String.join(",", parts));
                 } else {
@@ -342,5 +373,16 @@ public class AccessAccount {
             e.printStackTrace();
         }
     }
-}
 
+    private static void updateUserBalance(String username, int accountNumber, String newBalance) {
+        List<UserDetails> userAccounts = userDetailsMap.get(username);
+        if (userAccounts != null) {
+            for (UserDetails userDetails : userAccounts) {
+                if (userDetails.getAccountNumber().equals(String.valueOf(accountNumber))) {
+                    userDetails.setBalance(newBalance);
+                    return;
+                }
+            }
+        }
+    }
+}
