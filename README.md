@@ -14,6 +14,10 @@ Each of the other options asks for the amount the customer would like to withdra
 Lastly, the bank teller can exit the customer out their accounts without having to exit their own account in order to serve the next customer. 
 
 ASSUMPTIONS
-
+Customer knows their password and pin 
+Customer that is new and has created an account, recieves their passwords over email or phone.
+If the customer asks for a business cheque book, it is assumed to be sent directly to their address. 
+The bank teller checks physically and verifies the proof of address and photo ID.
+The bank teller checks physically and verifies the customer's business and address.
 
 by Razat, Shopitha and Hamza
