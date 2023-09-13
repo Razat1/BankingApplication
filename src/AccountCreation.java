@@ -51,9 +51,7 @@ public class AccountCreation {
             }
 
         }
-
-
-        //rest of the details asked from user
+      //rest of the details asked from user
         System.out.println("Please confirm photo ID proof of customer (Yes/No) : ");
 
         boolean photoID = userDetails.nextLine().equalsIgnoreCase("Yes");
@@ -82,12 +80,10 @@ public class AccountCreation {
                 sortCode = "05-04-20";
                 System.out.println("Confirm minimum deposit of £1 (Yes/No) : ");
                 depositConfirm = userDetails.nextLine().equalsIgnoreCase("Yes");
-                if (depositConfirm == true){
+                if (depositConfirm){
                     deposit ++;
                 }
                 accountType = "Personal";
-                //System.out.println(username + " " + accountNumber + " " + sortCode);
-
 
                 break;
             case 2:
@@ -134,16 +130,9 @@ public class AccountCreation {
                     default:
                         accountType = "Invalid choice";
                 }
-
                 System.out.println("You have created a " + accountType + " account.");
-
-
-
-                //2.75% apr
-
                 sortCode = "05-09-19";
 
-                //System.out.println(username + " " + accountNumber + " " + sortCode);
                 break;
             case 3:
                 //every year 120 taken off
@@ -162,15 +151,10 @@ public class AccountCreation {
                 System.out.println("Would you like to have an overdraft of £1000 (yes/no)");
                 overdraft = userDetails.nextLine().equalsIgnoreCase("Yes");
                 //CHECK IF ITS BEEN A YEAR AND DEDUCT 120
-
-
                 if (!businesstype || !businessaddressID || !annualcharge) {
                     value = 0;
                 }
-
-                //
-                break;
-
+             break;
 
         }
 
@@ -203,8 +187,6 @@ public class AccountCreation {
                 }
 
                 // Step 3: Append content to the file
-
-
                 System.out.println("Data appended to the file.");
 
             } catch (IOException e) {
@@ -220,7 +202,7 @@ public class AccountCreation {
     //code for randomly generated account, sort code and pin numbers
     private static String generateRandomAccountNumber() {
         Random random = new Random();
-        StringBuilder accountNumber = new StringBuilder("");
+        StringBuilder accountNumber = new StringBuilder();
         for (int i = 0; i < 8; i++) {
             accountNumber.append(random.nextInt(10));
         }

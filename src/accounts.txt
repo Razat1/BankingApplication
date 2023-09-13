@@ -2,6 +2,7 @@ Username,Firstname,Lastname,DateOfBirth,Business Name,Account Type,AccountNumber
 hamza,damiel,2001-01-10,N/A,Personal,85057750,05-04-20,1464,0
 
 joe,joe,b,2002-01-01,N/A,Personal,88169372,05-04-20,0283,60
-mary,mary,joseph,1999-09-11,N/A,Stocks & Shares ISA,52380849,05-09-19,5904,300
-little,lamb,master,1988-11-03,LittleLamb,Business,28966085,05-03-26,1703,280
-little,jack,daniels,1988-11-01,N/A,Personal,88734263,05-04-20,7615,111
+mary,mary,joseph,1999-09-11,N/A,Stocks & Shares ISA,52380849,05-09-19,5904,320
+little,lamb,master,1988-11-03,LittleLamb,Business,28966085,05-03-26,1703,460
+little,jack,daniels,1988-11-01,N/A,Personal,88734263,05-04-20,7615,191
+,joey,linguine,1999-09-11,N/A,Personal,36391675,05-04-20,8265,1001
